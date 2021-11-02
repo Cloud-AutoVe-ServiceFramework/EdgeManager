@@ -1,2 +1,2 @@
 # EdgeManager
-Service for edge system management
+Management Service for edge systems

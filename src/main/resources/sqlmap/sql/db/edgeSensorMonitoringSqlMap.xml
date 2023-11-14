@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.re.etri.advcloud.mapper.EdgeSensorMonitoringMapper">
+
+    <sql id="selection">
+        <where>
+            <if test="edge_group_id != null and edge_group_id != ''">
+                AND edge_group_id LIKE CONCAT('%',#{edge_group_id},'%')
+            </if>
+            <if test="edge_id != null and edge_id != ''">
+                AND edge_id LIKE CONCAT('%',#{edge_id},'%')
+            </if>
+            <if test="device_id != null and device_id != ''">
+                AND device_id LIKE CONCAT('%',#{device_id},'%')
+            </if>
+            <if test="message_datetime != null and message_datetime != ''">
+                AND message_datetime LIKE CONCAT('%',#{message_datetime},'%')
+            </if>
+        </where>
+    </sql>
+	
+	<select id="selectListCount" parameterType="EdgeSensorMonitoringVO" resultType="integer">
+        SELECT count(*)
+        FROM edge_sensor_monitoring
+        <include refid="selection" />
+    </select>
+	
+    <select id="selectList" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
+        SELECT message_serial,
+               message_datetime,
+			   edge_group_id,
+	           edge_id,
+	           device_id,
+	           status_code,
+	           coverage
+        FROM edge_sensor_monitoring
+        <include refid="selection" />
+        ORDER BY message_serial DESC
+        LIMIT #{pageSize} OFFSET #{pageOffset}
+    </select>
+    
+    <select id="select" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
+         SELECT message_serial,
+                message_datetime,
+			    edge_group_id,
+	            edge_id,
+	            device_id,
+	            status_code,
+	            coverage
+        FROM edge_sensor_monitoring
+        WHERE message_serial = #{message_serial}
+    </select>
+
+    <insert id="insert" parameterType="EdgeSensorMonitoringVO">
+        INSERT INTO edge_sensor_monitoring
+        <trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
+            message_datetime,
+            edge_group_id,
+            edge_id,
+            device_id,
+            status_code,
+            coverage
+        </trim>
+        VALUES
+        <trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
+            #{message_datetime},
+            #{edge_group_id},
+            #{edge_id},
+            #{device_id},
+            #{status_code},
+            #{coverage}
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="EdgeSensorMonitoringVO">
+        UPDATE edge_sensor_monitoring
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="message_datetime != null and message_datetime != ''">message_datetime = #{message_datetime},</if>
+            <if test="edge_group_id != null and edge_group_id != ''">edge_group_id = #{edge_group_id},</if>
+            <if test="edge_id != null and edge_id != ''">edge_id = #{edge_id},</if>
+            <if test="device_id != null and device_id != ''">device_id = #{device_id},</if>
+            <if test="status_code != null and status_code != ''">status_code = #{status_code},</if>
+            <if test="coverage != null and coverage != ''">coverage = #{coverage},</if>
+        </trim>
+        WHERE message_serial = #{message_serial}
+    </update>
+    
+    <delete id="delete" parameterType="EdgeSensorMonitoringVO">
+		DELETE FROM edge_sensor_monitoring WHERE message_serial = #{message_serial}
+	</delete>
+    
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.re.etri.advcloud.mapper.EdgeMonitoringMapper">
+
+    <sql id="selection">
+        <where>
+            <if test="edge_group_id != null and edge_group_id != ''">
+                AND edge_group_id LIKE CONCAT('%',#{edge_group_id},'%')
+            </if>
+            <if test="edge_id != null and edge_id != ''">
+                AND edge_id LIKE CONCAT('%',#{edge_id},'%')
+            </if>
+            <if test="message_datetime != null and message_datetime != ''">
+                AND message_datetime LIKE CONCAT('%',#{message_datetime},'%')
+            </if>
+        </where>
+    </sql>
+	
+	<select id="selectListCount" parameterType="EdgeMonitoringVO" resultType="integer">
+        SELECT count(*)
+        FROM edge_monitoring
+        <include refid="selection" />
+    </select>
+	
+    <select id="selectList" parameterType="EdgeMonitoringVO" resultType="EdgeMonitoringVO">
+        SELECT message_serial,
+               message_datetime,
+               edge_group_id,
+               edge_id,
+               error_cnt,
+               status_code,
+               process_cnt,
+               cpu_usage,
+               gpu_usage,
+               ram_usage,
+               hdd_usage
+        FROM edge_monitoring
+        <include refid="selection" />
+        ORDER BY message_serial DESC
+        LIMIT #{pageSize} OFFSET #{pageOffset}
+    </select>
+    
+    <select id="select" parameterType="EdgeMonitoringVO" resultType="EdgeMonitoringVO">
+        SELECT message_serial,
+               message_datetime,
+               edge_group_id,
+               edge_id,
+               error_cnt,
+               status_code,
+               process_cnt,
+               cpu_usage,
+               gpu_usage,
+               ram_usage,
+               hdd_usage
+        FROM edge_monitoring
+        WHERE message_serial = #{message_serial}
+    </select>
+
+    <insert id="insert" parameterType="EdgeMonitoringVO">
+        INSERT INTO edge_monitoring
+        <trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
+            message_datetime,
+            edge_group_id,
+            edge_id,
+            error_cnt,
+            status_code,
+            process_cnt,
+            cpu_usage,
+            gpu_usage,
+            ram_usage,
+            hdd_usage
+        </trim>
+        VALUES
+        <trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
+            #{message_datetime},
+            #{edge_group_id},
+            #{edge_id},
+            #{error_cnt},
+            #{status_code},
+            #{process_cnt},
+            #{cpu_usage},
+            #{gpu_usage},
+            #{ram_usage},
+            #{hdd_usage}
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="EdgeMonitoringVO">
+        UPDATE edge_monitoring
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="message_datetime != null and message_datetime != ''">message_datetime = #{message_datetime},</if>
+            <if test="edge_group_id != null and edge_group_id != ''">edge_group_id = #{edge_group_id},</if>
+            <if test="edge_id != null and edge_id != ''">edge_id = #{edge_id},</if>
+            <if test="error_cnt != null and error_cnt != -1">error_cnt = #{error_cnt},</if>
+            <if test="status_code != null and status_code != ''">status_code = #{status_code},</if>
+            <if test="process_cnt != null and process_cnt != -1">process_cnt = #{process_cnt},</if>
+            <if test="cpu_usage != null and cpu_usage != ''">cpu_usage = #{cpu_usage},</if>
+            <if test="gpu_usage != null and gpu_usage != ''">gpu_usage = #{gpu_usage},</if>
+            <if test="ram_usage != null and ram_usage != ''">ram_usage = #{ram_usage},</if>
+            <if test="hdd_usage != null and hdd_usage != ''">hdd_usage = #{hdd_usage},</if>
+        </trim>
+        WHERE message_serial = #{message_serial}
+    </update>
+    
+    <delete id="delete" parameterType="EdgeMonitoringVO">
+		DELETE FROM edge_monitoring WHERE message_serial = #{message_serial}
+	</delete>
+    
+</mapper>

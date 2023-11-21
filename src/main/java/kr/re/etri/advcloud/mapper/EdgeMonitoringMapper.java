@@ -20,4 +20,8 @@ public interface EdgeMonitoringMapper {
 
 	int delete(EdgeMonitoringVO edgeMonitoringVO);
 
+    int deleteSearch(EdgeMonitoringVO edgeMonitoringVO);
+
+    int selectErrCount(EdgeMonitoringVO edgeMonitoringVO);
+
 }

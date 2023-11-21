@@ -19,5 +19,9 @@ public interface EdgeSensorMonitoringMapper {
 	int insert(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
 
 	int delete(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
+
+    int selectErrCount(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
+
+    List<EdgeSensorMonitoringVO> selectDeviceList(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
 	
 }

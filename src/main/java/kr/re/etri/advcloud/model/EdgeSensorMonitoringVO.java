@@ -12,6 +12,7 @@ public class EdgeSensorMonitoringVO extends BaseSearch {
 	private String edge_group_id;		// 엣지 그룹 ID
 	private String edge_id;				// 엣지 ID
 	private String device_id;			// 디바이스 ID
+    private String device_name;			// 디바이스 NAME
 	private String status_code;			// 상태 코드
 	private String coverage;			// 커버리지
 	
@@ -113,4 +114,11 @@ public class EdgeSensorMonitoringVO extends BaseSearch {
 		this.coverage = coverage;
 	}
 
+    public String getDevice_name() {
+        return device_name;
+    }
+
+    public void setDevice_name(String device_name) {
+        this.device_name = device_name;
+    }
 }

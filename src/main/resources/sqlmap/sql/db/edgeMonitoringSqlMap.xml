@@ -14,33 +14,39 @@
             <if test="message_datetime != null and message_datetime != ''">
                 AND message_datetime LIKE CONCAT('%',#{message_datetime},'%')
             </if>
+            <if test="startDate != null and startDate != ''">
+                AND message_datetime >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND message_datetime &lt;= #{endDate}
+            </if>
         </where>
     </sql>
-	
-	<select id="selectListCount" parameterType="EdgeMonitoringVO" resultType="integer">
+
+    <select id="selectListCount" parameterType="EdgeMonitoringVO" resultType="integer">
         SELECT count(*)
         FROM edge_monitoring
-        <include refid="selection" />
+        <include refid="selection"/>
     </select>
-	
+
     <select id="selectList" parameterType="EdgeMonitoringVO" resultType="EdgeMonitoringVO">
         SELECT message_serial,
-               message_datetime,
-               edge_group_id,
-               edge_id,
-               error_cnt,
-               status_code,
-               process_cnt,
-               cpu_usage,
-               gpu_usage,
-               ram_usage,
-               hdd_usage
+        message_datetime,
+        edge_group_id,
+        edge_id,
+        error_cnt,
+        status_code,
+        process_cnt,
+        cpu_usage,
+        gpu_usage,
+        ram_usage,
+        hdd_usage
         FROM edge_monitoring
-        <include refid="selection" />
+        <include refid="selection"/>
         ORDER BY message_serial DESC
         LIMIT #{pageSize} OFFSET #{pageOffset}
     </select>
-    
+
     <select id="select" parameterType="EdgeMonitoringVO" resultType="EdgeMonitoringVO">
         SELECT message_serial,
                message_datetime,
@@ -102,9 +108,22 @@
         </trim>
         WHERE message_serial = #{message_serial}
     </update>
-    
+
     <delete id="delete" parameterType="EdgeMonitoringVO">
-		DELETE FROM edge_monitoring WHERE message_serial = #{message_serial}
-	</delete>
-    
+        DELETE
+        FROM edge_monitoring
+        WHERE message_serial = #{message_serial}
+    </delete>
+
+    <delete id="deleteSearch" parameterType="EdgeMonitoringVO">
+        DELETE
+        FROM edge_monitoring
+        <include refid="selection"/>
+    </delete>
+
+    <select id="selectErrCount" parameterType="EdgeMonitoringVO" resultType="Integer">
+        SELECT SUM(error_cnt)
+        FROM edge_monitoring
+        <include refid="selection"/>
+    </select>
 </mapper>

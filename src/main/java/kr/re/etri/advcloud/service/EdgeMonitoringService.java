@@ -10,32 +10,40 @@ import kr.re.etri.advcloud.model.EdgeMonitoringVO;
 
 @Service
 public class EdgeMonitoringService {
-	
-	@Autowired
-	private EdgeMonitoringMapper edgeMonitoringMapper;
-	
-	public int selectListCount (EdgeMonitoringVO edgeMonitoringVO) {
-		return edgeMonitoringMapper.selectListCount(edgeMonitoringVO);
-	}
-	
-	public List<EdgeMonitoringVO> selectList(EdgeMonitoringVO edgeMonitoringVO) {
-		return edgeMonitoringMapper.selectList(edgeMonitoringVO);
-	}
 
-	public EdgeMonitoringVO select(EdgeMonitoringVO edgeMonitoringVO) {
-		return edgeMonitoringMapper.select(edgeMonitoringVO);
-	}
+    @Autowired
+    private EdgeMonitoringMapper edgeMonitoringMapper;
 
-	public int insert(EdgeMonitoringVO edgeMonitoringVO) {
-		return edgeMonitoringMapper.insert(edgeMonitoringVO);
-	}
+    public int selectListCount(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.selectListCount(edgeMonitoringVO);
+    }
 
-	public int update(EdgeMonitoringVO edgeMonitoringVO) {
-		return edgeMonitoringMapper.update(edgeMonitoringVO);
-	}
+    public List<EdgeMonitoringVO> selectList(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.selectList(edgeMonitoringVO);
+    }
 
-	public int delete(EdgeMonitoringVO edgeMonitoringVO) {
-		return edgeMonitoringMapper.delete(edgeMonitoringVO);
-	}
-	
+    public int selectErrCount(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.selectErrCount(edgeMonitoringVO);
+    }
+
+    public EdgeMonitoringVO select(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.select(edgeMonitoringVO);
+    }
+
+    public int insert(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.insert(edgeMonitoringVO);
+    }
+
+    public int update(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.update(edgeMonitoringVO);
+    }
+
+    public int delete(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.delete(edgeMonitoringVO);
+    }
+
+    public int deleteSearch(EdgeMonitoringVO edgeMonitoringVO) {
+        return edgeMonitoringMapper.deleteSearch(edgeMonitoringVO);
+    }
+
 }

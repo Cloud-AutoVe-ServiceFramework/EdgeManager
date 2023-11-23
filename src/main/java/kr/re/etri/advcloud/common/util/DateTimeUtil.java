@@ -8,13 +8,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DateTimeUtil {
 
-	// private static final Logger logger = LoggerFactory.getLogger(DateTimeUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(DateTimeUtil.class);
 
 	private static TimeZone timeZone = TimeZone.getDefault();
 	private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-
+	
+	private static final Object syncLock = new Object();
+	
 	/**
 	 * convert to local time to utc time UTC = UTC - 9 hour
 	 * 
@@ -36,11 +41,15 @@ public class DateTimeUtil {
 	}
 
 	public static String getDateTimeFormatString(long dateTime) {
-		return simpleDateFormat.format(dateTime);
+		synchronized (syncLock) {
+			return simpleDateFormat.format(dateTime);
+		}
 	}
 
 	public static String getDateTimeFormatString(Date dateTime) {
-		return simpleDateFormat.format(dateTime);
+		synchronized (syncLock) {
+			return simpleDateFormat.format(dateTime);
+		}
 	}
 
 	/**
@@ -52,25 +61,27 @@ public class DateTimeUtil {
 	 * @return
 	 */
 	public static String getDateTimeFormatString(String strDate, int amount, String format) {
-		Calendar calendar = Calendar.getInstance();
-		Date date = calendar.getTime();
-		SimpleDateFormat sf = new SimpleDateFormat(format, Locale.ENGLISH);
+		synchronized (syncLock) {
+			Calendar calendar = Calendar.getInstance();
+			Date date = calendar.getTime();
+			SimpleDateFormat sf = new SimpleDateFormat(format, Locale.ENGLISH);
 
-		try {
-			if (!"".equals(strDate)) {
-				date = sf.parse(strDate);
-				calendar.setTime(date);
+			try {
+				if (!"".equals(strDate)) {
+					date = sf.parse(strDate);
+					calendar.setTime(date);
+				}
+
+				calendar.add(Calendar.MINUTE, amount);
+
+				date = calendar.getTime();
+				strDate = sf.format(date);
+			} catch (ParseException e) {
+				logger.error(e.getMessage(), e); // XXX: 정적 검사 수정, 2022-10-11
 			}
 
-			calendar.add(Calendar.MINUTE, amount);
-
-			date = calendar.getTime();
-			strDate = sf.format(date);
-		} catch (ParseException e) {
-			e.printStackTrace();
+			return strDate;
 		}
-
-		return strDate;
 	}
 
 	public static long getDateTimeToLong(String strDate, String format) {
@@ -84,7 +95,7 @@ public class DateTimeUtil {
 
 			time = calendar.getTime().getTime();
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e); // XXX: 정적 검사 수정, 2022-10-11
 		}
 
 		return time;

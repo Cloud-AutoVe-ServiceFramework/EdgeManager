@@ -40,11 +40,9 @@
 	           device_id,
 	           status_code,
 	           coverage,
-                CASE WHEN device_id = 'D-0001' THEN '라이다'
-                        WHEN device_id = 'D-0002' THEN '카메라'
-                        WHEN device_id = 'D-0003' THEN 'GPS'
-                        WHEN device_id = 'D-0004' THEN '센서1'
-                        WHEN device_id = 'D-0005' THEN '센서2'
+                CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+                     WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+                     WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
                 END AS device_name
         FROM edge_sensor_monitoring
         <include refid="selection" />
@@ -60,11 +58,9 @@
 	            device_id,
 	            status_code,
 	            coverage,
-	            CASE WHEN device_id = 'D-0001' THEN '라이다'
-                     WHEN device_id = 'D-0002' THEN '카메라'
-                     WHEN device_id = 'D-0003' THEN 'GPS'
-                     WHEN device_id = 'D-0004' THEN '센서1'
-                     WHEN device_id = 'D-0005' THEN '센서2'
+                CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+                    WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+                    WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
                 END AS device_name
         FROM edge_sensor_monitoring
         WHERE message_serial = #{message_serial}
@@ -117,11 +113,9 @@
 
     <select id="selectDeviceList" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
         SELECT DISTINCT device_id,
-            CASE WHEN device_id = 'D-0001' THEN '라이다'
-                 WHEN device_id = 'D-0002' THEN '카메라'
-                 WHEN device_id = 'D-0003' THEN 'GPS'
-                 WHEN device_id = 'D-0004' THEN '센서1'
-                 WHEN device_id = 'D-0005' THEN '센서2'
+            CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+                WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+                WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
             END device_name
         FROM edge_sensor_monitoring
         <include refid="selection" />

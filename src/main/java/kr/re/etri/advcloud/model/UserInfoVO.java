@@ -1,19 +1,22 @@
 package kr.re.etri.advcloud.model;
 
 import kr.re.etri.advcloud.common.annotation.Model;
-import kr.re.etri.advcloud.common.base.BaseObject;
+import kr.re.etri.advcloud.common.base.BaseSearch;
 
 @SuppressWarnings("serial")
 @Model
-public class UserInfoVO extends BaseObject {
+public class UserInfoVO extends BaseSearch {
 	
 	private String id;
 	private String password;
 	private String name;
+	private String email;
+	private String tel_no;
 	private String register_date;
 	private int manage_vehicle_count = -1;
 	private int manage_edge_count = -1;
-
+	private String auth_code;
+	
 	/**
 	 * @return the id
 	 */
@@ -54,6 +57,34 @@ public class UserInfoVO extends BaseObject {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the tel_no
+	 */
+	public String getTel_no() {
+		return tel_no;
+	}
+
+	/**
+	 * @param tel_no the tel_no to set
+	 */
+	public void setTel_no(String tel_no) {
+		this.tel_no = tel_no;
 	}
 
 	/**
@@ -98,4 +129,18 @@ public class UserInfoVO extends BaseObject {
 		this.manage_edge_count = manage_edge_count;
 	}
 
+	/**
+	 * @return the auth_code
+	 */
+	public String getAuth_code() {
+		return auth_code;
+	}
+
+	/**
+	 * @param auth_code the auth_code to set
+	 */
+	public void setAuth_code(String auth_code) {
+		this.auth_code = auth_code;
+	}
+	
 }

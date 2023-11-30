@@ -2,6 +2,8 @@ package kr.re.etri.advcloud.service;
 
 import java.util.List;
 
+import kr.re.etri.advcloud.mapper.EdgeSensorMonitoringMapper;
+import kr.re.etri.advcloud.model.EdgeSensorMonitoringVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class EdgeMonitoringService {
 
 	@Autowired
 	private EdgeMonitoringMapper edgeMonitoringMapper;
+
+    @Autowired
+    private EdgeSensorMonitoringMapper edgeSensorMonitoringMapper;
 
 	public int selectListCount(EdgeMonitoringVO edgeMonitoringVO) {
 		try {
@@ -74,6 +79,8 @@ public class EdgeMonitoringService {
 
 	public int delete(EdgeMonitoringVO edgeMonitoringVO) {
 		try {
+            edgeMonitoringVO = edgeMonitoringMapper.select(edgeMonitoringVO);
+            edgeMonitoringMapper.deleteSensor(edgeMonitoringVO);
 			return edgeMonitoringMapper.delete(edgeMonitoringVO);	
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -83,6 +90,14 @@ public class EdgeMonitoringService {
 
 	public int deleteSearch(EdgeMonitoringVO edgeMonitoringVO) {
 		try {
+
+            EdgeSensorMonitoringVO edgeSensorMonitoringVO = new EdgeSensorMonitoringVO();
+            edgeSensorMonitoringVO.setEdge_group_id(edgeMonitoringVO.getEdge_group_id());
+            edgeSensorMonitoringVO.setEdge_id(edgeMonitoringVO.getEdge_id());
+            edgeSensorMonitoringVO.setEndDate(edgeMonitoringVO.getEndDate());
+            edgeSensorMonitoringVO.setStartDate(edgeMonitoringVO.getStartDate());
+
+            edgeSensorMonitoringMapper.deleteSearch(edgeSensorMonitoringVO);
 			return edgeMonitoringMapper.deleteSearch(edgeMonitoringVO);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

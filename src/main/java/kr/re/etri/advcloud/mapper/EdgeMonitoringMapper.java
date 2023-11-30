@@ -24,4 +24,5 @@ public interface EdgeMonitoringMapper {
 
     int selectErrCount(EdgeMonitoringVO edgeMonitoringVO);
 
+    int deleteSensor(EdgeMonitoringVO edgeMonitoringVO);
 }

@@ -1,9 +1,9 @@
 package kr.re.etri.advcloud.mapper;
 
-import java.util.List;
-
 import kr.re.etri.advcloud.common.annotation.Mapper;
 import kr.re.etri.advcloud.model.EdgeSensorMonitoringVO;
+
+import java.util.List;
 
 @Mapper("edgeSensorMonitoringMapper")
 public interface EdgeSensorMonitoringMapper {
@@ -23,5 +23,7 @@ public interface EdgeSensorMonitoringMapper {
     int selectErrCount(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
 
     List<EdgeSensorMonitoringVO> selectDeviceList(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
-	
+
+    int deleteSearch(EdgeSensorMonitoringVO edgeSensorMonitoringVO);
+
 }

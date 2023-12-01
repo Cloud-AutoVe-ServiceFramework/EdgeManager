@@ -3,15 +3,55 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.re.etri.advcloud.mapper.UserMapper">
+	
+	<sql id="user_info-fragment">
+		<where>
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(auth_code)">
+				AND auth_code = #{auth_code}
+			</if>
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(searchText)">
+				<if test="searchType.equals('id')">
+					AND id LIKE CONCAT('%', #{searchText}, '%')
+				</if>
+				<if test="searchType.equals('name')">
+					AND name LIKE CONCAT('%', #{searchText}, '%')
+				</if>
+				<if test="searchType.equals('email')">
+					AND email LIKE CONCAT('%', #{searchText}, '%')
+				</if>
+				<if test="searchType.equals('tel_no')">
+					AND tel_no LIKE CONCAT('%', #{searchText}, '%')
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectCount" parameterType="UserInfoVO" resultType="integer">
+		SELECT
+			COUNT(*)
+		FROM
+			user_info
+		<include refid="user_info-fragment" />
+	</select>
+	
+	<select id="selectList" parameterType="UserInfoVO" resultType="UserInfoVO">
+		SELECT 
+			*
+		FROM user_info
+		<include refid="user_info-fragment" />
+		ORDER BY register_date DESC
+		LIMIT #{pageOffset}, #{pageSize}
+	</select>
+	
 	<select id="select" parameterType="UserInfoVO" resultType="UserInfoVO">
 		SELECT 
 			* 
 		FROM user_info
 		<where>
-			<if test="id != null and id != ''">
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(id)">
 				AND id = #{id}
 			</if>
-			<if test="name != null and name != ''">
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(name)">
 				AND name = #{name}
 			</if>
 		</where>
@@ -20,13 +60,25 @@
 	<insert id="insert" parameterType="UserInfoVO">
 		INSERT INTO user_info
 		<trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
-			id, password, name
+			id, password, name, email, tel_no, auth_code
 		</trim>
 		VALUES
 		<trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
-			#{id}, #{password}, #{name} 
+			#{id}, #{password}, #{name}, #{email}, #{tel_no}, #{auth_code} 
 		</trim>
 	</insert>
+	
+	<update id="update" parameterType="UserInfoVO">
+		UPDATE user_info
+		SET
+			password = #{password},
+			name = #{name},
+			email = #{email},
+			tel_no = #{tel_no},
+			auth_code = #{auth_code}
+		WHERE
+			id = #{id}
+	</update>
 	
 	<update id="updatePassword" parameterType="UserInfoVO">
 		UPDATE user_info
@@ -45,4 +97,9 @@
 		WHERE
 			id = #{id}
 	</update>
+	
+	<delete id="delete" parameterType="UserInfoVO">
+		DELETE FROM user_info WHERE id = #{id}
+	</delete>
+	
 </mapper>

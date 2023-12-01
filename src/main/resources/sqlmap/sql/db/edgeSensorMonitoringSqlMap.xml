@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.re.etri.advcloud.mapper.EdgeSensorMonitoringMapper">
-
     <sql id="selection">
         <where>
             <if test="edge_group_id != null and edge_group_id != ''">
@@ -23,45 +22,66 @@
             <if test="endDate != null and endDate != ''">
                 AND message_datetime &lt;= #{endDate}
             </if>
+            <if test="searchErr != null and searchErr != ''">
+                <choose>
+                    <when test="searchErr == 'NORMAL'">
+                        AND status_code = 0
+                    </when>
+                    <when test="searchErr == 'ABNORMAL'">
+                        AND status_code > 0
+                    </when>
+                </choose>
+            </if>
         </where>
     </sql>
 
-	<select id="selectListCount" parameterType="EdgeSensorMonitoringVO" resultType="integer">
+    <select id="selectListCount" parameterType="EdgeSensorMonitoringVO" resultType="integer">
         SELECT count(*)
         FROM edge_sensor_monitoring
-        <include refid="selection" />
+        <include refid="selection"/>
     </select>
 
     <select id="selectList" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
         SELECT message_serial,
-               message_datetime,
-			   edge_group_id,
-	           edge_id,
-	           device_id,
-	           status_code,
-	           coverage,
-                CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                     WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                     WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                END AS device_name
+        message_datetime,
+        edge_group_id,
+        edge_id,
+        device_id,
+        status_code,
+        coverage,
+        CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+        WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+        WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+        END AS device_name
         FROM edge_sensor_monitoring
-        <include refid="selection" />
-        ORDER BY message_serial DESC
+        <include refid="selection"/>
+        <choose>
+            <when test="order != null and order == 'chart'">
+                ORDER BY message_serial ASC
+            </when>
+            <when test="order != null and order == 'list'">
+                ORDER BY message_serial DESC
+            </when>
+            <otherwise>
+                ORDER BY message_serial DESC
+            </otherwise>
+        </choose>
         LIMIT #{pageSize} OFFSET #{pageOffset}
     </select>
 
     <select id="select" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
-         SELECT message_serial,
-                message_datetime,
-			    edge_group_id,
-	            edge_id,
-	            device_id,
-	            status_code,
-	            coverage,
-                CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                    WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                    WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                END AS device_name
+        SELECT message_serial,
+               message_datetime,
+               edge_group_id,
+               edge_id,
+               device_id,
+               status_code,
+               coverage,
+               CASE
+                   WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER))
+                   WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER))
+                   WHEN device_id LIKE 'RSU%'
+                       THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER)) END AS device_name
         FROM edge_sensor_monitoring
         WHERE message_serial = #{message_serial}
     </select>
@@ -90,35 +110,53 @@
     <update id="update" parameterType="EdgeSensorMonitoringVO">
         UPDATE edge_sensor_monitoring
         <trim prefix="SET" suffixOverrides=",">
-            <if test="message_datetime != null and message_datetime != ''">message_datetime = #{message_datetime},</if>
-            <if test="edge_group_id != null and edge_group_id != ''">edge_group_id = #{edge_group_id},</if>
-            <if test="edge_id != null and edge_id != ''">edge_id = #{edge_id},</if>
-            <if test="device_id != null and device_id != ''">device_id = #{device_id},</if>
-            <if test="status_code != null and status_code != ''">status_code = #{status_code},</if>
-            <if test="coverage != null and coverage != ''">coverage = #{coverage},</if>
+            <if test="message_datetime != null and message_datetime != ''">
+                message_datetime = #{message_datetime},
+            </if>
+            <if test="edge_group_id != null and edge_group_id != ''">
+                edge_group_id = #{edge_group_id},
+            </if>
+            <if test="edge_id != null and edge_id != ''">
+                edge_id = #{edge_id},
+            </if>
+            <if test="device_id != null and device_id != ''">
+                device_id = #{device_id},
+            </if>
+            <if test="status_code != null and status_code != ''">
+                status_code = #{status_code},
+            </if>
+            <if test="coverage != null and coverage != ''">
+                coverage = #{coverage},
+            </if>
         </trim>
         WHERE message_serial = #{message_serial}
     </update>
 
     <delete id="delete" parameterType="EdgeSensorMonitoringVO">
-		DELETE FROM edge_sensor_monitoring WHERE message_serial = #{message_serial}
-	</delete>
+        DELETE
+        FROM edge_sensor_monitoring
+        WHERE message_serial = #{message_serial}
+    </delete>
+    <delete id="deleteSearch" parameterType="EdgeSensorMonitoringVO">
+        DELETE
+        FROM edge_sensor_monitoring
+        <include refid="selection"/>
+    </delete>
 
     <select id="selectErrCount" parameterType="EdgeSensorMonitoringVO" resultType="Integer">
         SELECT
-               SUM(IF(status_code = '1', '1', '0'))
+        SUM(IF(status_code = '1', '1', '0'))
         FROM edge_sensor_monitoring
-        <include refid="selection" />
+        <include refid="selection"/>
     </select>
 
     <select id="selectDeviceList" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
         SELECT DISTINCT device_id,
-            CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-                WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
-            END device_name
+        CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+        WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+        WHEN device_id LIKE 'RSU%' THEN CONCAT('RSU', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
+        END device_name
         FROM edge_sensor_monitoring
-        <include refid="selection" />
+        <include refid="selection"/>
     </select>
-
 </mapper>

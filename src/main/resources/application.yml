@@ -1,7 +1,13 @@
+#-----------------------------------------------------------------------
+#
+#   applicaton : Base Configuation 
+#   
+#-----------------------------------------------------------------------
+
 spring:
   profiles:
     #local or dev or prod
-    active: prod
+    active: local
     include: common, datasource, logging
   devtools:
     restart:
@@ -13,6 +19,13 @@ spring:
       max-file-size: 1GB
       max-request-size: 1GB
 
+mybatis:
+  mapper-locations: sqlmap/sql/**/*.xml
+  configuration:
+    cache-enabled: true
+    multiple-result-sets-enabled: true
+    call-setters-on-nulls: true
+
 ---
 
 spring:
@@ -21,13 +34,7 @@ spring:
       on-profile: local
 
 server:
-  port: 8083
-  ssl:
-    enabled: true
-    key-store: offlineMasking-test-server.p12
-    key-store-password: test123
-    key-store-type: PKCS12
-    key-alias: offlineMasking-test-server
+  port: 8085
 
 ---
 
@@ -38,13 +45,6 @@ spring:
 
 server:
   port: 80
-  ssl:
-    enabled: true
-    key-store: offlineMasking-test-server.p12
-    key-store-password: test123
-    key-store-type: PKCS12
-    key-alias: offlineMasking-test-server
-
 ---
 
 spring:
@@ -54,9 +54,3 @@ spring:
 
 server:
   port: 80
-  ssl:
-    enabled: true
-    key-store: offlineMasking-test-server.p12
-    key-store-password: test123
-    key-store-type: PKCS12
-    key-alias: offlineMasking-test-server

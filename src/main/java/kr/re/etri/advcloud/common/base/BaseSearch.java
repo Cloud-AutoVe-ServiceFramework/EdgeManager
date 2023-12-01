@@ -11,7 +11,12 @@ public class BaseSearch extends BaseObject {
 	
 	private String startDate;
 	private String endDate;
-	
+    private String order;
+    
+    protected String searchType;
+	protected String searchText;
+    private String searchErr;
+
 	/**
 	 * @return the pageNum
 	 */
@@ -89,5 +94,48 @@ public class BaseSearch extends BaseObject {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+    
+    /**
+	 * @return the searchType
+	 */
+	public String getSearchType() {
+		return searchType;
+	}
+
+	/**
+	 * @param searchType the searchType to set
+	 */
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+
+	/**
+	 * @return the searchText
+	 */
+	public String getSearchText() {
+		return searchText;
+	}
+
+	/**
+	 * @param searchText the searchText to set
+	 */
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
+
+    public String getSearchErr() {
+        return searchErr;
+    }
+
+    public void setSearchErr(String searchErr) {
+        this.searchErr = searchErr;
+    }
 }

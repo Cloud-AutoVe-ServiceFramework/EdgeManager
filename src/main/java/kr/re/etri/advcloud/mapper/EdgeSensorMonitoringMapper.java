@@ -1,11 +1,11 @@
 package kr.re.etri.advcloud.mapper;
 
-import kr.re.etri.advcloud.common.annotation.Mapper;
 import kr.re.etri.advcloud.model.EdgeSensorMonitoringVO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper("edgeSensorMonitoringMapper")
+@Mapper
 public interface EdgeSensorMonitoringMapper {
 	
 	int selectListCount(EdgeSensorMonitoringVO edgeSensorMonitoringVO);

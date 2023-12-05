@@ -1,11 +1,11 @@
 package kr.re.etri.advcloud.mapper;
 
+import kr.re.etri.advcloud.model.UserInfoVO;
+import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
 
-import kr.re.etri.advcloud.common.annotation.Mapper;
-import kr.re.etri.advcloud.model.UserInfoVO;
-
-@Mapper("userMapper")
+@Mapper
 public interface UserMapper {
 	
 	int selectCount(UserInfoVO userInfoVO);

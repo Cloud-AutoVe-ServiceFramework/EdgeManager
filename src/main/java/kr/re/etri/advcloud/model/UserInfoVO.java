@@ -1,10 +1,8 @@
 package kr.re.etri.advcloud.model;
 
-import kr.re.etri.advcloud.common.annotation.Model;
 import kr.re.etri.advcloud.common.base.BaseSearch;
 
 @SuppressWarnings("serial")
-@Model
 public class UserInfoVO extends BaseSearch {
 	
 	private String id;

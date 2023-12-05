@@ -1,10 +1,8 @@
 package kr.re.etri.advcloud.model;
 
-import kr.re.etri.advcloud.common.annotation.Model;
 import kr.re.etri.advcloud.common.base.BaseSearch;
 
 @SuppressWarnings("serial")
-@Model
 public class EdgeSensorMonitoringVO extends BaseSearch {
 	
 	private int message_serial = -1;	// 메시지 일련번호

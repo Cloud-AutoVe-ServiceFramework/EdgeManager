@@ -32,13 +32,13 @@
         </where>
     </sql>
 
-    <select id="selectListCount" parameterType="EdgeMonitoringVO" resultType="integer">
+    <select id="selectListCount" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO" resultType="Integer">
         SELECT count(*)
         FROM edge_monitoring
         <include refid="selection"/>
     </select>
 
-    <select id="selectList" parameterType="EdgeMonitoringVO" resultType="EdgeMonitoringVO">
+    <select id="selectList" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO" resultType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         SELECT message_serial,
         message_datetime,
         edge_group_id,
@@ -66,7 +66,7 @@
         LIMIT #{pageSize} OFFSET #{pageOffset}
     </select>
 
-    <select id="select" parameterType="EdgeMonitoringVO" resultType="EdgeMonitoringVO">
+    <select id="select" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO" resultType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         SELECT message_serial,
                message_datetime,
                edge_group_id,
@@ -82,7 +82,7 @@
         WHERE message_serial = #{message_serial}
     </select>
 
-    <insert id="insert" parameterType="EdgeMonitoringVO">
+    <insert id="insert" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         INSERT INTO edge_monitoring
         <trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
             message_datetime,
@@ -111,7 +111,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="EdgeMonitoringVO">
+    <update id="update" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         UPDATE edge_monitoring
         <trim prefix="SET" suffixOverrides=",">
             <if test="message_datetime != null and message_datetime != ''">
@@ -148,25 +148,25 @@
         WHERE message_serial = #{message_serial}
     </update>
 
-    <delete id="delete" parameterType="EdgeMonitoringVO">
+    <delete id="delete" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         DELETE
         FROM edge_monitoring
         WHERE message_serial = #{message_serial}
     </delete>
 
-    <delete id="deleteSearch" parameterType="EdgeMonitoringVO">
+    <delete id="deleteSearch" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         DELETE
         FROM edge_monitoring
         <include refid="selection"/>
     </delete>
 
-    <select id="selectErrCount" parameterType="EdgeMonitoringVO" resultType="Integer">
+    <select id="selectErrCount" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO" resultType="Integer">
         SELECT SUM(error_cnt)
         FROM edge_monitoring
         <include refid="selection"/>
     </select>
 
-    <delete id="deleteSensor" parameterType="EdgeMonitoringVO">
+    <delete id="deleteSensor" parameterType="kr.re.etri.advcloud.model.EdgeMonitoringVO">
         DELETE FROM edge_sensor_monitoring
         WHERE message_datetime = #{message_datetime} AND edge_group_id = #{edge_group_id} AND edge_id = #{edge_id}
     </delete>

@@ -35,13 +35,13 @@
         </where>
     </sql>
 
-    <select id="selectListCount" parameterType="EdgeSensorMonitoringVO" resultType="integer">
+    <select id="selectListCount" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO" resultType="Integer">
         SELECT count(*)
         FROM edge_sensor_monitoring
         <include refid="selection"/>
     </select>
 
-    <select id="selectList" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
+    <select id="selectList" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO" resultType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         SELECT message_serial,
         message_datetime,
         edge_group_id,
@@ -69,7 +69,7 @@
         LIMIT #{pageSize} OFFSET #{pageOffset}
     </select>
 
-    <select id="select" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
+    <select id="select" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO" resultType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         SELECT message_serial,
                message_datetime,
                edge_group_id,
@@ -86,7 +86,7 @@
         WHERE message_serial = #{message_serial}
     </select>
 
-    <insert id="insert" parameterType="EdgeSensorMonitoringVO">
+    <insert id="insert" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         INSERT INTO edge_sensor_monitoring
         <trim prefix="(" prefixOverrides="" suffix=")" suffixOverrides=",">
             message_datetime,
@@ -107,7 +107,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="EdgeSensorMonitoringVO">
+    <update id="update" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         UPDATE edge_sensor_monitoring
         <trim prefix="SET" suffixOverrides=",">
             <if test="message_datetime != null and message_datetime != ''">
@@ -132,25 +132,25 @@
         WHERE message_serial = #{message_serial}
     </update>
 
-    <delete id="delete" parameterType="EdgeSensorMonitoringVO">
+    <delete id="delete" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         DELETE
         FROM edge_sensor_monitoring
         WHERE message_serial = #{message_serial}
     </delete>
-    <delete id="deleteSearch" parameterType="EdgeSensorMonitoringVO">
+    <delete id="deleteSearch" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         DELETE
         FROM edge_sensor_monitoring
         <include refid="selection"/>
     </delete>
 
-    <select id="selectErrCount" parameterType="EdgeSensorMonitoringVO" resultType="Integer">
+    <select id="selectErrCount" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO" resultType="Integer">
         SELECT
         SUM(IF(status_code = '1', '1', '0'))
         FROM edge_sensor_monitoring
         <include refid="selection"/>
     </select>
 
-    <select id="selectDeviceList" parameterType="EdgeSensorMonitoringVO" resultType="EdgeSensorMonitoringVO">
+    <select id="selectDeviceList" parameterType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO" resultType="kr.re.etri.advcloud.model.EdgeSensorMonitoringVO">
         SELECT DISTINCT device_id,
         CASE WHEN device_id LIKE 'LID%' THEN CONCAT('라이다', CAST(SUBSTRING(device_id, 5) AS INTEGER ))
         WHEN device_id LIKE 'CAM%' THEN CONCAT('카메라', CAST(SUBSTRING(device_id, 5) AS INTEGER ))

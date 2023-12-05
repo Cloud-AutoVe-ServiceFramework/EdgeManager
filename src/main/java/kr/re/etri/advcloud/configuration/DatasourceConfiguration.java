@@ -45,12 +45,12 @@ public class DatasourceConfiguration extends AbstractDatasourceConfiguration {
 	@Primary
 	@Bean(name="sqlSessionFactory")
 	public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) {
-		// XXX: 
+		
 		try {
 			SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 			sqlSessionFactoryBean.setDataSource(dataSource);
 			sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:sqlmap/config/mybatisConfig.xml"));
-			sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:sqlmap/sql/maria/**/*.xml"));
+			sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:sqlmap/sql/db/**/*.xml"));
 			sqlSessionFactoryBean.setTypeAliases(findModel());
 			//sqlSessionFactoryBean.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);
 			
